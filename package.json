@@ -1,0 +1,180 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "agent-acp",
+  "title": "AI Agent (ACP)",
+  "description": "Chat with Claude, Codex (ChatGPT) or any ACP agent through the Agent Client Protocol, the same way Zed does. Uses your existing logins, no API key required.",
+  "icon": "extension-icon.png",
+  "author": "daniele",
+  "categories": [
+    "Productivity",
+    "Developer Tools"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "ask-agent",
+      "title": "Ask AI Agent",
+      "description": "Chat with your ACP agent, with follow-ups",
+      "mode": "view"
+    },
+    {
+      "name": "conversations",
+      "title": "AI Agent Conversations",
+      "description": "Browse and resume past conversations",
+      "mode": "view"
+    },
+    {
+      "name": "saved-answers",
+      "title": "Saved Answers",
+      "description": "Answers you saved from chats",
+      "mode": "view"
+    },
+    {
+      "name": "run-prompt",
+      "title": "Run Prompt",
+      "description": "Run a saved prompt on the selected text or clipboard",
+      "mode": "view"
+    },
+    {
+      "name": "manage-prompts",
+      "title": "Manage Prompts",
+      "description": "Create and edit prompts with {selection} and {clipboard} variables",
+      "mode": "view"
+    },
+    {
+      "name": "summarize-selection",
+      "title": "Summarize Selected Text",
+      "description": "Summarize the text selected in the frontmost app",
+      "mode": "view"
+    },
+    {
+      "name": "fix-grammar",
+      "title": "Fix Grammar of Selected Text",
+      "description": "Fix spelling and grammar of the selected text",
+      "mode": "view"
+    },
+    {
+      "name": "translate-selection",
+      "title": "Translate Selected Text",
+      "description": "Translate the selected text",
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "language",
+          "placeholder": "Language (default English)",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "explain-selection",
+      "title": "Explain Selected Text",
+      "description": "Explain the selected text or code",
+      "mode": "view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "agent",
+      "title": "Agent",
+      "description": "Which ACP agent to run. Claude uses your Claude Code login; Codex uses your ChatGPT login (run `codex login` once).",
+      "type": "dropdown",
+      "required": false,
+      "default": "claude",
+      "data": [
+        {
+          "title": "Claude",
+          "value": "claude"
+        },
+        {
+          "title": "Codex (ChatGPT)",
+          "value": "codex"
+        },
+        {
+          "title": "Custom command",
+          "value": "custom"
+        }
+      ]
+    },
+    {
+      "name": "agentCommand",
+      "title": "Agent Command",
+      "description": "Only used when Agent is 'Custom command' (e.g. `gemini --experimental-acp`, or a globally installed `claude-agent-acp` for faster startup).",
+      "type": "textfield",
+      "required": false
+    },
+    {
+      "name": "extraPath",
+      "title": "Extra PATH",
+      "description": "Colon-separated folders added to PATH so node/npx and the agent are found (Raycast doesn't load your shell profile).",
+      "type": "textfield",
+      "required": false,
+      "default": "/opt/homebrew/bin:/usr/local/bin"
+    },
+    {
+      "name": "workingDirectory",
+      "title": "Working Directory",
+      "description": "Folder the agent works in (absolute path). Defaults to your home folder.",
+      "type": "directory",
+      "required": false
+    },
+    {
+      "name": "permissionPolicy",
+      "title": "Tool Permissions",
+      "description": "What to do when the agent wants to run a tool (edit files, run commands\u2026)",
+      "type": "dropdown",
+      "required": false,
+      "default": "ask",
+      "data": [
+        {
+          "title": "Ask me each time",
+          "value": "ask"
+        },
+        {
+          "title": "Always allow",
+          "value": "allow"
+        },
+        {
+          "title": "Always reject",
+          "value": "reject"
+        }
+      ]
+    },
+    {
+      "name": "apiKey",
+      "title": "API Key (optional)",
+      "description": "Only needed if you're not logged in. Passed as ANTHROPIC_API_KEY (Claude) or OPENAI_API_KEY (Codex).",
+      "type": "password",
+      "required": false
+    },
+    {
+      "name": "autoAttachSelection",
+      "title": "Chat",
+      "label": "Attach selected text automatically when opening Ask AI Agent",
+      "description": "When on, text selected in the frontmost app is attached to your first question.",
+      "type": "checkbox",
+      "required": false,
+      "default": true
+    }
+  ],
+  "dependencies": {
+    "@agentclientprotocol/sdk": "^2.6.0",
+    "@raycast/api": "^1.93.0",
+    "@raycast/utils": "^1.19.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^2.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "lint": "ray lint",
+    "fix-lint": "ray lint --fix"
+  }
+}
