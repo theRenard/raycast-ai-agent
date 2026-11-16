@@ -2,11 +2,11 @@
 
 Talks to Claude, Codex (ChatGPT) or any ACP agent over the [Agent Client Protocol](https://agentclientprotocol.com), the same way Zed does: the extension spawns the agent's ACP adapter as a child process and speaks JSON-RPC to it over stdio. The adapters use your existing Claude Code or ChatGPT login, so you don't need an API key.
 
-![Chat with usage sidebar, agent and model dropdown](metadata/chat-usage.png)
+![Chat with usage sidebar, agent and model dropdown](docs/screenshots/chat-usage.png)
 
-![Actions menu: copy, paste, save, regenerate, attachments](metadata/actions.png)
+![Actions menu: copy, paste, save, regenerate, attachments](docs/screenshots/actions.png)
 
-![All commands in Raycast](metadata/commands.png)
+![All commands in Raycast](docs/screenshots/commands.png)
 
 ## Commands
 
