@@ -86,6 +86,11 @@ export const DEFAULT_PROMPTS: PromptTemplate[] = [
     prompt: "Write unit tests for this code. Output only code.\n\n{selection}",
   },
   {
+    id: "summarize-page",
+    title: "Summarize Webpage",
+    prompt: "Summarize this web page in a few bullet points, then list any action items or key facts.\n\n{browser-tab}",
+  },
+  {
     id: "clipboard",
     title: "Explain Clipboard",
     prompt: "Explain this simply:\n\n{clipboard}",

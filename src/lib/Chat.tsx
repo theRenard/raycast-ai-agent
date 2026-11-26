@@ -2,7 +2,17 @@ import { Action, ActionPanel, Icon, Keyboard, List, getPreferenceValues, showToa
 import { useEffect, useMemo, useState } from "react";
 import { useAgent } from "./useAgent";
 import { AgentKind, Prefs, agentLabel, availableAgents, renderTurn } from "./acp";
-import { Attachment, clipboardAttachment, finderAttachments, selectionAttachment, withAttachments } from "./context";
+import {
+  Attachment,
+  BrowserTab,
+  browserTabAttachment,
+  canUseBrowser,
+  clipboardAttachment,
+  finderAttachments,
+  listBrowserTabs,
+  selectionAttachment,
+  withAttachments,
+} from "./context";
 import { Conversation, saveAnswer } from "./store";
 import { usageRows, usageSummary } from "./usage";
 
@@ -15,6 +25,8 @@ export function Chat(props: { conversation?: Conversation; onOpenHistory?: () =>
   const [input, setInput] = useState("");
   const [selected, setSelected] = useState<string | undefined>();
   const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [tabs, setTabs] = useState<BrowserTab[] | undefined>();
+  const browser = canUseBrowser();
 
   const add = (a?: Attachment | Attachment[], emptyMsg = "Nothing to attach") => {
     const list = Array.isArray(a) ? a : a ? [a] : [];
@@ -113,6 +125,34 @@ export function Chat(props: { conversation?: Conversation; onOpenHistory?: () =>
           shortcut={{ modifiers: ["cmd"], key: "f" }}
           onAction={() => attach(finderAttachments, "No Finder selection")}
         />
+        {browser ? (
+          <Action
+            title="Attach Current Browser Tab"
+            icon={Icon.AppWindow}
+            shortcut={{ modifiers: ["cmd", "shift"], key: "t" }}
+            onAction={() => attach(() => browserTabAttachment(), "Couldn't read the browser tab")}
+          />
+        ) : null}
+        {browser ? (
+          <ActionPanel.Submenu
+            title="Attach Browser Tab…"
+            icon={Icon.Window}
+            onOpen={() =>
+              listBrowserTabs()
+                .then(setTabs)
+                .catch(() => setTabs([]))
+            }
+          >
+            {(tabs ?? []).map((t) => (
+              <Action
+                key={t.id}
+                title={t.title}
+                icon={t.active ? Icon.CheckCircle : Icon.Circle}
+                onAction={() => attach(() => browserTabAttachment(t.id), "Couldn't read that tab")}
+              />
+            ))}
+          </ActionPanel.Submenu>
+        ) : null}
         {attachments.length ? (
           <Action title="Clear Attachments" icon={Icon.XMarkCircle} onAction={() => setAttachments([])} />
         ) : null}
@@ -197,7 +237,7 @@ export function Chat(props: { conversation?: Conversation; onOpenHistory?: () =>
           description={
             attachments.length
               ? `Attached: ${attachments.map((a) => a.name).join(", ")}`
-              : "⌘T attach selection · ⌘B clipboard · ⌘F Finder files"
+              : "⌘T attach selection · ⌘B clipboard · ⌘F Finder files" + (browser ? " · ⇧⌘T browser tab" : "")
           }
         />
       ) : (

@@ -11,9 +11,10 @@ Talks to Claude, Codex (ChatGPT) or any ACP agent over the [Agent Client Protoco
 ## Commands
 
 - **Ask AI Agent**: chat. Type in the search bar, press Enter. Selected text is attached automatically (preference). Actions: copy/paste/save answer (⌘S), regenerate (⌘R), attach selection (⌘T), clipboard (⌘B) or Finder files and images (⌘F), new conversation (⌘N), history (⌘H), stop (⌘.). The Agent submenu switches mode, model and thinking level live, whatever the agent offers.
+- **Browser tabs** (needs the [Raycast Browser Extension](https://www.raycast.com/browser-extension), not available on Windows): ⇧⌘T attaches the current tab as markdown, or pick any open tab from "Attach Browser Tab…". **Summarize Webpage** summarizes the active tab, and custom prompts can use `{browser-tab}`.
 - **AI Agent Conversations**: past chats, saved locally. Resuming starts a fresh agent session and gives it the recent transcript as context.
 - **Saved Answers**: answers saved with ⌘S.
-- **Run Prompt / Manage Prompts**: your own prompts with `{selection}` and `{clipboard}` variables, optional "Replace Selection", tools off by default.
+- **Run Prompt / Manage Prompts**: your own prompts with `{selection}`, `{clipboard}` and `{browser-tab}` variables, optional "Replace Selection", tools off by default.
 - **Summarize / Fix Grammar / Translate / Explain Selected Text**: act on the selected text. Try Again with ⌘R.
 
 ## Setup

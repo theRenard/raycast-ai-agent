@@ -21,7 +21,7 @@ function PromptForm(props: { prompt?: PromptTemplate; onSave: (p: PromptTemplate
       <Form.TextArea
         id="prompt"
         title="Prompt"
-        info="Use {selection} for the selected text and {clipboard} for the clipboard."
+        info="Use {selection} for the selected text, {clipboard} for the clipboard and {browser-tab} for the active browser tab (needs the Raycast Browser Extension)."
         placeholder="Rewrite this more formally:\n\n{selection}"
         defaultValue={props.prompt?.prompt}
       />

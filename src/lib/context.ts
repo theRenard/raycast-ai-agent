@@ -1,4 +1,4 @@
-import { Clipboard, getSelectedFinderItems, getSelectedText } from "@raycast/api";
+import { BrowserExtension, Clipboard, environment, getSelectedFinderItems, getSelectedText } from "@raycast/api";
 import { readFile, stat } from "node:fs/promises";
 import { basename, extname } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -56,6 +56,41 @@ async function fileAttachment(path: string): Promise<Attachment> {
     if (!buf.includes(0)) return { name, blocks: [text(`<file name="${name}">\n${buf.toString("utf8")}\n</file>`)] };
   }
   return { name, blocks: [{ type: "resource_link", name, uri: pathToFileURL(path).toString() }] };
+}
+
+const MAX_PAGE = 60_000;
+
+/** True when Raycast's Browser Extension API can be used (not available on Windows). */
+export const canUseBrowser = () => environment.canAccess(BrowserExtension);
+
+export type BrowserTab = { id: number; title: string; url: string; active: boolean };
+
+export async function listBrowserTabs(): Promise<BrowserTab[]> {
+  const tabs = await BrowserExtension.getTabs();
+  return tabs.map((t) => ({ id: t.id, title: t.title || t.url, url: t.url, active: t.active }));
+}
+
+/** A tab's readable content as markdown. Defaults to the active tab of the focused window. */
+export async function browserPage(tabId?: number): Promise<{ title: string; url: string; markdown: string }> {
+  const [markdown, tabs] = await Promise.all([
+    BrowserExtension.getContent({ format: "markdown", ...(tabId != null ? { tabId } : {}) }),
+    BrowserExtension.getTabs().catch(() => []),
+  ]);
+  const tab = tabId != null ? tabs.find((t) => t.id === tabId) : tabs.find((t) => t.active);
+  if (!markdown.trim()) throw new Error("The page has no readable content");
+  return {
+    title: tab?.title || tab?.url || "Browser tab",
+    url: tab?.url ?? "",
+    markdown: markdown.length > MAX_PAGE ? `${markdown.slice(0, MAX_PAGE)}\n\n[truncated]` : markdown,
+  };
+}
+
+export async function browserTabAttachment(tabId?: number): Promise<Attachment> {
+  const p = await browserPage(tabId);
+  return {
+    name: `Tab: ${p.title.slice(0, 40)}`,
+    blocks: [text(`<webpage title="${p.title}" url="${p.url}">\n${p.markdown}\n</webpage>`)],
+  };
 }
 
 /** Prompt text plus its attachments as one ACP content array. */

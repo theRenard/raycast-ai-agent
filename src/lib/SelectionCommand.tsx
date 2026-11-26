@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef } from "react";
 import { useAgent } from "./useAgent";
 import { renderTurn } from "./acp";
+import { browserPage } from "./context";
 import { usageRows } from "./usage";
 
 const GUARD =
@@ -36,6 +37,12 @@ async function build(props: Props): Promise<{ message: string; display: string }
       const sel = (await getSelectedText().catch(() => "")).trim();
       if (!sel) throw new Error("Select some text first");
       message = message.replaceAll("{selection}", sel);
+    }
+    if (message.includes("{browser-tab}")) {
+      const page = await browserPage().catch((e) => {
+        throw new Error(`Couldn't read the browser tab: ${e instanceof Error ? e.message : String(e)}`);
+      });
+      message = message.replaceAll("{browser-tab}", `Page "${page.title}" (${page.url}):\n\n${page.markdown}`);
     }
     if (message.includes("{clipboard}")) {
       const clip = (await Clipboard.readText())?.trim();

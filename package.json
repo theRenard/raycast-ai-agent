@@ -42,6 +42,12 @@
       "mode": "view"
     },
     {
+      "name": "summarize-page",
+      "title": "Summarize Webpage",
+      "description": "Summarize the active browser tab (needs the Raycast Browser Extension)",
+      "mode": "view"
+    },
+    {
       "name": "summarize-selection",
       "title": "Summarize Selected Text",
       "description": "Summarize the text selected in the frontmost app",
