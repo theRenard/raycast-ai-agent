@@ -175,7 +175,7 @@
     "@types/react": "^19.0.0",
     "eslint": "^10.14.0",
     "prettier": "^3.4.0",
-    "typescript": "^5.7.0"
+    "typescript": "^7.0.2"
   },
   "scripts": {
     "build": "ray build",
